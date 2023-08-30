@@ -2,31 +2,22 @@
 
 #include <wx/wx.h>
 
-class Sphere {
- public:
-  Sphere(Vector3D center, double radius, wxColour color, double specular = 0.0,
-         double reflective = 0.0)
-      : center(center),
-        radius(radius),
-        color(color),
-        specular(specular),
-        reflective(reflective) {}
-
- private:
-  Vector3D center;
-  double radius;
-  wxColour color;
-  double specular;
-  double reflective;
+Light::Light() {
+  // Конструктор класса Light
 }
 
-Light::~Light() {
-}
+Sphere::Sphere(Vector3d center, double radius, wxColour color, double specular,
+               double reflective)
+    : center(center),
+      radius(radius),
+      color(color),
+      specular(specular),
+      reflective(reflective) {}
 
 AmbientLight::AmbientLight(double intensity) : intensity(intensity) {}
 
-PointLight::PointLight(double intensity, Vector3D position)
+PointLight::PointLight(double intensity, Vector3d position)
     : intensity(intensity), position(position) {}
 
-DirectionalLight::DirectionalLight(double intensity, Vector3D directional)
+DirectionalLight::DirectionalLight(double intensity, Vector3d directional)
     : intensity(intensity), directional(directional) {}
