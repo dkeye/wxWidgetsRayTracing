@@ -10,12 +10,12 @@
 
 class RayTracingUtils {
  public:
-  static void raytrace(double width, double height,
+  static void raytrace(int width, int height,
                        std::vector<std::vector<wxColour>>& imageColors);
   static wxColour traceRay(const Camera& camera, const Vector3d& ray,
-                           double traceMin, double traceMax,
+                           float traceMin, float traceMax,
                            std::vector<Sphere>& spheres,
                            const wxColour& BACKGROUND_COLOR);
-  static std::tuple<double, double> intersectSphere(
+  static std::tuple<float, float> intersectSphere(
       const Camera& camera, const Vector3d& ray, const Sphere& sphere);
 };

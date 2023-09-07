@@ -2,7 +2,7 @@
 
 #include "Vector3d.h"
 
-Camera::Camera(double x, double y, double z, double w)
+Camera::Camera(float x, float y, float z, float w)
     : Vector3d(x, y, z), matrix44d{{0}} {
   matrix44d[0][0] = x;
   matrix44d[1][1] = y;
@@ -17,7 +17,7 @@ void Camera::multPointMatrix(const Vector3d &point, Vector3d &out) {
           point.z * matrix44d[1][3] + matrix44d[3][0];
   out.z = point.x * matrix44d[2][1] + point.y * matrix44d[2][2] +
           point.z * matrix44d[2][3] + matrix44d[3][0];
-  double w = point.x * matrix44d[3][1] + point.y * matrix44d[3][2] +
+  float w = point.x * matrix44d[3][1] + point.y * matrix44d[3][2] +
              point.z * matrix44d[3][3] + matrix44d[3][0];
 
   // normalize
@@ -28,7 +28,7 @@ void Camera::multPointMatrix(const Vector3d &point, Vector3d &out) {
   }
 }
 
-void Camera::moveView(double x, double y, double z, double w) {
+void Camera::moveView(float x, float y, float z, float w) {
   matrix44d[0][0] = x;
   matrix44d[1][1] = y;
   matrix44d[2][2] = -z;

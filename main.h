@@ -1,20 +1,35 @@
 #pragma once
 
-#include <wx/wx.h>
+#include "wx/glcanvas.h"
+#include "wx/wx.h"
 
-class MyFrame : public wxFrame {
+class BasicGLPane : public wxGLCanvas {
+  wxGLContext* m_context;
+
  public:
-  MyFrame(const wxChar* title, int xpos, int ypos, int width, int height);
-  bool OnInit();
-  void OnPaint(wxPaintEvent& event);
+  BasicGLPane(wxFrame* parent, int* args);
+  virtual ~BasicGLPane();
 
-  ~MyFrame();
+  void resized(wxSizeEvent& evt);
+
+  int getWidth();
+  int getHeight();
+
+  void render(wxPaintEvent& evt);
+  // void prepare3DViewport(int topleft_x, int topleft_y, int bottomrigth_x,
+  //                        int bottomrigth_y);
+  void prepare2DViewport(int topleft_x, int topleft_y, int bottomrigth_x,
+                         int bottomrigth_y);
+
+  // events
+  void mouseMoved(wxMouseEvent& event);
+  void mouseDown(wxMouseEvent& event);
+  void mouseWheelMoved(wxMouseEvent& event);
+  void mouseReleased(wxMouseEvent& event);
+  void rightClick(wxMouseEvent& event);
+  void mouseLeftWindow(wxMouseEvent& event);
+  void keyPressed(wxKeyEvent& event);
+  void keyReleased(wxKeyEvent& event);
+
+  DECLARE_EVENT_TABLE()
 };
-
-class MyApp : public wxApp {
- public:
-  /** Initialize the application */
-  virtual bool OnInit();
-};
-
-DECLARE_APP(MyApp)

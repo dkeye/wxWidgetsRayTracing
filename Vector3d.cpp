@@ -2,14 +2,14 @@
 
 #include <cmath>
 
-Vector3d::Vector3d(double x, double y, double z) : x(x), y(y), z(z) {}
+Vector3d::Vector3d(float x, float y, float z) : x(x), y(y), z(z) {}
 
-double Vector3d::length() const {
+float Vector3d::length() const {
     return std::sqrt(x * x + y * y + z * z);
 }
 
 Vector3d Vector3d::normalized() const {
-    double len = length();
+    float len = length();
     if (len != 0.0) {
         return Vector3d(x / len, y / len, z / len);
     } else {
@@ -25,11 +25,11 @@ Vector3d Vector3d::operator-(const Vector3d& other) const {
     return Vector3d(x - other.x, y - other.y, z - other.z);
 }
 
-double Vector3d::operator*(const Vector3d& other) const {
+float Vector3d::operator*(const Vector3d& other) const {
     return x * other.x + y * other.y + z * other.z;
 }
 
-Vector3d Vector3d::operator*(double scalar) const {
+Vector3d Vector3d::operator*(float scalar) const {
     return Vector3d(x * scalar, y * scalar, z * scalar);
 }
 

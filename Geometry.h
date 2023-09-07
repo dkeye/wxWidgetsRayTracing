@@ -6,14 +6,14 @@
 
 class Sphere {
  public:
-  Sphere(Vector3d center, double radius, wxColour color, double specular = 0.0,
-         double reflective = 0.0);
+  Sphere(Vector3d center, float radius, wxColour color, float specular = 0.0,
+         float reflective = 0.0);
 
   Vector3d center;
-  double radius;
+  float radius;
   wxColour color;
-  double specular;
-  double reflective;
+  float specular;
+  float reflective;
 };
 
 class Light {
@@ -24,22 +24,22 @@ class Light {
 
 class AmbientLight : public Light {
  public:
-  explicit AmbientLight(double intensity);
+  explicit AmbientLight(float intensity);
 
-  double intensity;
+  float intensity;
 };
 
 class PointLight : public Light {
-  explicit PointLight(double intensity, Vector3d position);
+  explicit PointLight(float intensity, Vector3d position);
 
-  double intensity;
+  float intensity;
   Vector3d position;
 };
 
 class DirectionalLight : public Light {
-  explicit DirectionalLight(double intensity, Vector3d directional);
+  explicit DirectionalLight(float intensity, Vector3d directional);
 
-  double intensity;
+  float intensity;
   Vector3d directional;
 };
 

@@ -2,40 +2,45 @@
 
 #include <wx/wx.h>
 
+#include <format>
 #include <tuple>
 #include <vector>
 
-#define INF std::numeric_limits<double>::max()
-
+#define INF std::numeric_limits<float>::max()
 
 void RayTracingUtils::raytrace(
-    double width, double height,
-    std::vector<std::vector<wxColour>>& imageColors) {
+    int width, int height, std::vector<std::vector<wxColour>>& imageColors) {
+  float aspectRatio = static_cast<float>(width) / static_cast<float>(height);
   struct viewport {
-    double width = 1;
-    double height = 1;
+    float width = 1;
+    float height = 1;
   };
-  wxColour BACKGROUND_COLOR = *wxWHITE;
-  Camera camera(width / 2, height / 2, 0);
-
-  std::vector<Sphere> spheres = {Sphere(Vector3d(200, 600, 4), 1, *wxRED),
-                                 Sphere(Vector3d(600, 600, 4), 1, *wxGREEN),
-                                 Sphere(Vector3d(400, 300, 3), 1, *wxBLUE)};
-
-  for (int x = 0; x < width; x++) {
-    for (int y = 0; y < height; y++) {
-      imageColors[x][y] = traceRay(
-          camera, Vector3d(x * viewport().width, y * viewport().height, 1), 1,
-          INF, spheres, BACKGROUND_COLOR);
+  viewport myViewport = viewport{1, 1 / aspectRatio};
+  wxColour BACKGROUND_COLOR = *wxBLACK;
+  Camera camera(0, 0, 0);
+  std::vector<Sphere> spheres = {
+    Sphere(Vector3d(0, -1, 4), 1, *wxRED),
+    Sphere(Vector3d(-1, 0, 5), 1, *wxGREEN),
+    Sphere(Vector3d(1, 0, 6), 1, *wxBLUE)
+};
+  for (float Cx = -width / 2; Cx < width / 2; Cx++) {
+    for (float Cy = -height / 2; Cy < height / 2; Cy++) {
+      int Sx = width / 2 + Cx;
+      int Sy = height / 2 - Cy - 1;
+      Vector3d canvasToViewport = Vector3d(Cx * myViewport.width / width,
+                                           Cy * myViewport.height / height, 1);
+      wxColour pointColour =
+          traceRay(camera, canvasToViewport, 1, INF, spheres, BACKGROUND_COLOR);
+      imageColors[Sx][Sy] = pointColour;
     }
   }
 }
 
 wxColour RayTracingUtils::traceRay(const Camera& camera, const Vector3d& ray,
-                                   double traceMin, double traceMax,
+                                   float traceMin, float traceMax,
                                    std::vector<Sphere>& spheres,
                                    const wxColour& BACKGROUND_COLOR) {
-  double closest_t = traceMax;
+  float closest_t = traceMax;
   Sphere* closest_sphere = nullptr;
 
   for (Sphere& sphere : spheres) {
@@ -50,24 +55,24 @@ wxColour RayTracingUtils::traceRay(const Camera& camera, const Vector3d& ray,
     }
   }
 
-  if (closest_sphere->radius > 0) {
+  if (closest_sphere != nullptr && closest_sphere->radius > 0) {
     return closest_sphere->color;
   }
   return BACKGROUND_COLOR;
 }
 
-std::tuple<double, double> RayTracingUtils::intersectSphere(
+std::tuple<float, float> RayTracingUtils::intersectSphere(
     const Camera& camera, const Vector3d& ray, const Sphere& sphere) {
-  Vector3d ray_direction = camera - sphere.center;
-  double k1 = ray_direction * ray_direction;
-  double k2 = ray_direction * ray * 2;
-  double k3 = ray_direction * ray_direction - sphere.radius * sphere.radius;
+  Vector3d Co = camera - sphere.center;
+  float k1 = ray * ray;
+  float k2 = 2 * (Co * ray);
+  float k3 = (Co * Co) - sphere.radius * sphere.radius;
 
-  double discriminant = k2 * k2 - 4 * k1 * k3;
+  float discriminant = k2 * k2 - 4 * k1 * k3;
   if (discriminant < 0) {
     return {INF, INF};
   }
-  double t1 = (-k2 + std::sqrt(discriminant)) / (2 * k1);
-  double t2 = (-k2 - std::sqrt(discriminant)) / (2 * k1);
+  float t1 = (-k2 + std::sqrt(discriminant)) / (2 * k1);
+  float t2 = (-k2 - std::sqrt(discriminant)) / (2 * k1);
   return {t1, t2};
 }
